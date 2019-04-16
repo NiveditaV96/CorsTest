@@ -1,0 +1,44 @@
+﻿<div>
+    <select id="method">
+        <option value="get">GET</option>
+        <option value="post">POST</option>
+        <option value="put">PUT</option>
+    </select>
+    <input type="button" value="Try it" onclick="sendRequest()" />
+    <ul id="ulList"></ul>
+    <span id='value1'>(Result)</span>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function ()
+        { 
+        });
+        var serviceUrl = 'http://localhost:51672/api/OrderingSystem/GetAll';
+        //'http://mywebservice/api/test';
+
+    function sendRequest() {
+        var method = $('#method').val();
+
+        $.ajax({
+            type: method,
+            url: serviceUrl,
+            dataType: 'json',
+        }).done(function (data) {
+            $.each(data, function (index, val) {
+                var id = val.Id;
+                var name = val.Name;
+                var price = val.Price;
+                var qty = val.Quantity;
+                ulList.append(id + name + "\n" + price + "\n" + qty);
+                //ulList.append('<li>' + name + '</li>');
+                //ulList.append('<li>' + price + '</li>');
+                //ulList.append('<li>' + qty + '</li>');
+                
+            });
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            $('#value1').text(jqXHR.responseText || textStatus);
+        });
+    }
+    </script>
+}
